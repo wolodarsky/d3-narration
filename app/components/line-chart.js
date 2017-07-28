@@ -3,6 +3,7 @@ import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
 import { max } from 'd3-array';
+import { line } from 'd3-shape';
 
 export default Ember.Component.extend({
 
@@ -19,6 +20,10 @@ export default Ember.Component.extend({
     this.y = scaleLinear()
         .range([this.height, 0]);
 
+    this.line = line()
+      .x( d => this.x(d.key) )
+      .y( d => this.y(d.value) );
+
     this.updateAxes();
   },
 
@@ -30,6 +35,7 @@ export default Ember.Component.extend({
 
   didInsertElement() {
     this._super(...arguments);
+
     let svg = select("#line-chart")
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
@@ -69,23 +75,28 @@ export default Ember.Component.extend({
     svg.select(".y.axis")
         .call(this.yAxis);
 
-    let bar = svg.selectAll(".bar")
-        .data(data, d => d.key );
+    //let line = svg.selectAll(".line")
+        //.data(data);
 
-    bar.exit().remove(); // exit
+    //line.exit().remove(); // exit
 
-    bar.enter().append("rect") // enter
-        .attr("class", "bar")
-        .attr("x", d => this.x(d.key) )
-        .attr("width", this.x.bandwidth())
-        .attr("y", d => this.y(d.value) )
-        .attr("height", d => this.height - this.y(d.value) )
-      .merge(bar) // update
-        .attr("class", "bar")
-        .attr("x", d => this.x(d.key) )
-        .attr("width", this.x.bandwidth())
-        .attr("y", d => this.y(d.value) )
-        .attr("height", d => this.height - this.y(d.value) );
+    svg.append("path") // enter
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "steelblue")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 1.5)
+        .attr("d", this.line);
+      //.merge(line) // update
+        //.attr("class", "line")
+        //.attr("fill", "none")
+        //.attr("stroke", "steelblue")
+        //.attr("stroke-linejoin", "round")
+        //.attr("stroke-linecap", "round")
+        //.attr("stroke-width", 1.5)
+        //.attr("d", this.line);
+    //
+    //
   }
-
 });
