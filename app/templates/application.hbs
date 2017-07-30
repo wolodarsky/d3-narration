@@ -1,6 +1,6 @@
 {{#sticky-container options=myStickyOptions}}
     <div class="top-bar-right">
-        {{#zf-magellan data-animation-duration="1000"
+        {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
           data-animation-easing="swing" class="vertical menu align-right"}}
         <li><a href="#first">Reveal</a></li>
         <li><a href="#second">Accordion Menu</a></li>
@@ -9,32 +9,57 @@
     </div>
 {{/sticky-container}}
 
-<section id="first" data-magellan-target="first">
-  {{line-chart chartId="combined-mpg" data=data groupBy="comb08"}}
-</section>
-<section id="second" data-magellan-target="second">
-  {{line-chart chartId="displacement" data=data groupBy="displ"}}
-</section>
-{{!--
-<section id="first" data-magellan-target="first">
-Lorem ipsum dolor sit amet, placerat tempor sunt mauris, maecenas convallis augue, urna convallis sit, duis ac, facilisi sed. Faucibus aliquet sed aenean taciti, tortor nullam ligula amet consequat rutrum elit, suscipit lorem metus aenean. Laoreet nec dapibus sodales et, sed amet rutrum. Non egestas nunc et, massa sed quis vel. Sed est tristique laoreet. Mauris lacinia ante enim elit, vivamus tellus aliquam dolor dui fusce, eos ligula vehicula, porttitor dui scelerisque maecenas suscipit tellus. Mauris in, integer et mus nisl, euismod lectus aenean eu duis in consectetuer. In euismod, ultricies nisl massa turpis. Placerat eget sed taciti dui imperdiet maecenas, turpis eu volutpat vel et duis, venenatis proin mollis. Eu sed placerat arcu taciti, vel amet sed, elit elit malesuada, risus accusamus vel nam, suspendisse erat justo curabitur semper vivamus interdum. Natoque in cum sit ut, egestas sed tellus sapien felis quam.
-Maecenas sagittis. Venenatis etiam, cumque aliquam suscipit vel purus eu, morbi eu molestie blandit, sodales mauris velit lacus enim viverra lorem. Id ultricies in luctus dapibus, wisi sociis nullam, erat lacus, nec adipiscing ullamcorper ultrices nulla diam. Eget dictum quisque nullam eleifend fermentum nam, egestas donec pellentesque maecenas commodo nec. Sed id felis sed, vel in, libero tempor, quis vivamus vehicula temporibus metus amet. Feugiat gravida mattis suspendisse, donec sed sit. Scelerisque ac mi, tincidunt dictum nunc odio, enim nibh nulla eu integer aliquam. Ut ultricies, suscipit arcu lacus venenatis facilisis aliquam, iaculis pretium libero tellus praesent, dolor ut convallis pretium, arcu vivamus erat a. Mollis eget velit habitasse id a mi, rutrum sit mauris wisi est fermentum eros, porta elit hymenaeos lacus eget sed nec, mauris metus massa amet sed. Expedita dignissim. Tortor iaculis nam elit wisi pulvinar ultrices. Nec amet nullam mauris sit ipsum mauris.
-Sit vitae porttitor magnis eros, elit sem mauris, aliquam ipsum vestibulum, molestie dui, est dolor integer. Consectetuer tellus malesuada ultricies massa pulvinar, neque bibendum tempus. Amet tincidunt et pretium amet. Interdum gravida quia quam elementum wisi, congue nulla praesent pharetra. Vitae in, feugiat urna adipiscing rhoncus ante volutpat pellentesque, urna arcu in sem, ante vestibulum condimentum a pede, pede suspendisse vehicula. Pharetra sodales mattis amet, nec aut cras, aliquam velit proin. Duis bibendum, eu orci lacinia elit aliquet, erat id wisi dictumst sed ut et, augue sapien. Lobortis bibendum in lacinia sem risus, massa donec sapien inceptos class platea, deserunt at. Sagittis curabitur dignissim feugiat aliquam, non pellentesque odio wisi dolor, consequat pulvinar nibh ac mauris. Mi tincidunt. Pede eros magnis pede, nec auctor eros. Metus faucibus tempor, mus dictum aenean, accumsan sem sed ac, sit ipsum sodales sit, mauris sit.
-Neque laoreet, etiam hendrerit, metus sed sit excepturi laoreet sollicitudin, neque urna eu in sit lacus urna, id aenean purus. Imperdiet netus sapien non gravida sed, viverra venenatis vestibulum mauris placerat justo rutrum, a sed consectetuer elit imperdiet. Quisque volutpat dolor integer proident enim nonummy. Eu eu habitasse eros, dui enim venenatis aliquam quis elit. Ex aenean lorem mauris libero elit sit, eros arcu morbi massa lacinia vitae sit, culpa sed integer mus, wisi volutpat et, luctus vitae maecenas praesent inceptos. Vel leo viverra felis, non integer aptent non proin malesuada sed, posuere sapien nisl luctus vestibulum nec morbi, turpis nunc odio ante rutrum, facilisis vel condimentum duis facilisis. Odio arcu risus ante aliquid, sed tristique tellus, nec convallis, nibh turpis hendrerit morbi turpis.
 
-<section id="second" data-magellan-target="second">
-Lorem ipsum dolor sit amet, placerat tempor sunt mauris, maecenas convallis augue, urna convallis sit, duis ac, facilisi sed. Faucibus aliquet sed aenean taciti, tortor nullam ligula amet consequat rutrum elit, suscipit lorem metus aenean. Laoreet nec dapibus sodales et, sed amet rutrum. Non egestas nunc et, massa sed quis vel. Sed est tristique laoreet. Mauris lacinia ante enim elit, vivamus tellus aliquam dolor dui fusce, eos ligula vehicula, porttitor dui scelerisque maecenas suscipit tellus. Mauris in, integer et mus nisl, euismod lectus aenean eu duis in consectetuer. In euismod, ultricies nisl massa turpis. Placerat eget sed taciti dui imperdiet maecenas, turpis eu volutpat vel et duis, venenatis proin mollis. Eu sed placerat arcu taciti, vel amet sed, elit elit malesuada, risus accusamus vel nam, suspendisse erat justo curabitur semper vivamus interdum. Natoque in cum sit ut, egestas sed tellus sapien felis quam.
-Maecenas sagittis. Venenatis etiam, cumque aliquam suscipit vel purus eu, morbi eu molestie blandit, sodales mauris velit lacus enim viverra lorem. Id ultricies in luctus dapibus, wisi sociis nullam, erat lacus, nec adipiscing ullamcorper ultrices nulla diam. Eget dictum quisque nullam eleifend fermentum nam, egestas donec pellentesque maecenas commodo nec. Sed id felis sed, vel in, libero tempor, quis vivamus vehicula temporibus metus amet. Feugiat gravida mattis suspendisse, donec sed sit. Scelerisque ac mi, tincidunt dictum nunc odio, enim nibh nulla eu integer aliquam. Ut ultricies, suscipit arcu lacus venenatis facilisis aliquam, iaculis pretium libero tellus praesent, dolor ut convallis pretium, arcu vivamus erat a. Mollis eget velit habitasse id a mi, rutrum sit mauris wisi est fermentum eros, porta elit hymenaeos lacus eget sed nec, mauris metus massa amet sed. Expedita dignissim. Tortor iaculis nam elit wisi pulvinar ultrices. Nec amet nullam mauris sit ipsum mauris.
-Sit vitae porttitor magnis eros, elit sem mauris, aliquam ipsum vestibulum, molestie dui, est dolor integer. Consectetuer tellus malesuada ultricies massa pulvinar, neque bibendum tempus. Amet tincidunt et pretium amet. Interdum gravida quia quam elementum wisi, congue nulla praesent pharetra. Vitae in, feugiat urna adipiscing rhoncus ante volutpat pellentesque, urna arcu in sem, ante vestibulum condimentum a pede, pede suspendisse vehicula. Pharetra sodales mattis amet, nec aut cras, aliquam velit proin. Duis bibendum, eu orci lacinia elit aliquet, erat id wisi dictumst sed ut et, augue sapien. Lobortis bibendum in lacinia sem risus, massa donec sapien inceptos class platea, deserunt at. Sagittis curabitur dignissim feugiat aliquam, non pellentesque odio wisi dolor, consequat pulvinar nibh ac mauris. Mi tincidunt. Pede eros magnis pede, nec auctor eros. Metus faucibus tempor, mus dictum aenean, accumsan sem sed ac, sit ipsum sodales sit, mauris sit.
-Neque laoreet, etiam hendrerit, metus sed sit excepturi laoreet sollicitudin, neque urna eu in sit lacus urna, id aenean purus. Imperdiet netus sapien non gravida sed, viverra venenatis vestibulum mauris placerat justo rutrum, a sed consectetuer elit imperdiet. Quisque volutpat dolor integer proident enim nonummy. Eu eu habitasse eros, dui enim venenatis aliquam quis elit. Ex aenean lorem mauris libero elit sit, eros arcu morbi massa lacinia vitae sit, culpa sed integer mus, wisi volutpat et, luctus vitae maecenas praesent inceptos. Vel leo viverra felis, non integer aptent non proin malesuada sed, posuere sapien nisl luctus vestibulum nec morbi, turpis nunc odio ante rutrum, facilisis vel condimentum duis facilisis. Odio arcu risus ante aliquid, sed tristique tellus, nec convallis, nibh turpis hendrerit morbi turpis.
-</section>
+  <section id="first" data-magellan-target="first">
+    <div class="row">
+      <div class="small-10 columns">
+          <h4>Top Auto Maker's Average Combined MPG by Year</h4>
+          {{line-chart chartId="combined-mpg" data=data rollup="comb08"
+          annotation="honda"}}
+      </div>
+      <div class="small-2 columns">
+        <p>6 columns</p>
+        <p>
+          {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
+            data-animation-easing="swing"}}
+            <li><a href="#second">Accordion Menu</a></li>
+          {{/zf-magellan}}
+        </p>
 
-<section id="third" data-magellan-target="third">
-Lorem ipsum dolor sit amet, placerat tempor sunt mauris, maecenas convallis augue, urna convallis sit, duis ac, facilisi sed. Faucibus aliquet sed aenean taciti, tortor nullam ligula amet consequat rutrum elit, suscipit lorem metus aenean. Laoreet nec dapibus sodales et, sed amet rutrum. Non egestas nunc et, massa sed quis vel. Sed est tristique laoreet. Mauris lacinia ante enim elit, vivamus tellus aliquam dolor dui fusce, eos ligula vehicula, porttitor dui scelerisque maecenas suscipit tellus. Mauris in, integer et mus nisl, euismod lectus aenean eu duis in consectetuer. In euismod, ultricies nisl massa turpis. Placerat eget sed taciti dui imperdiet maecenas, turpis eu volutpat vel et duis, venenatis proin mollis. Eu sed placerat arcu taciti, vel amet sed, elit elit malesuada, risus accusamus vel nam, suspendisse erat justo curabitur semper vivamus interdum. Natoque in cum sit ut, egestas sed tellus sapien felis quam.
-Maecenas sagittis. Venenatis etiam, cumque aliquam suscipit vel purus eu, morbi eu molestie blandit, sodales mauris velit lacus enim viverra lorem. Id ultricies in luctus dapibus, wisi sociis nullam, erat lacus, nec adipiscing ullamcorper ultrices nulla diam. Eget dictum quisque nullam eleifend fermentum nam, egestas donec pellentesque maecenas commodo nec. Sed id felis sed, vel in, libero tempor, quis vivamus vehicula temporibus metus amet. Feugiat gravida mattis suspendisse, donec sed sit. Scelerisque ac mi, tincidunt dictum nunc odio, enim nibh nulla eu integer aliquam. Ut ultricies, suscipit arcu lacus venenatis facilisis aliquam, iaculis pretium libero tellus praesent, dolor ut convallis pretium, arcu vivamus erat a. Mollis eget velit habitasse id a mi, rutrum sit mauris wisi est fermentum eros, porta elit hymenaeos lacus eget sed nec, mauris metus massa amet sed. Expedita dignissim. Tortor iaculis nam elit wisi pulvinar ultrices. Nec amet nullam mauris sit ipsum mauris.
-Sit vitae porttitor magnis eros, elit sem mauris, aliquam ipsum vestibulum, molestie dui, est dolor integer. Consectetuer tellus malesuada ultricies massa pulvinar, neque bibendum tempus. Amet tincidunt et pretium amet. Interdum gravida quia quam elementum wisi, congue nulla praesent pharetra. Vitae in, feugiat urna adipiscing rhoncus ante volutpat pellentesque, urna arcu in sem, ante vestibulum condimentum a pede, pede suspendisse vehicula. Pharetra sodales mattis amet, nec aut cras, aliquam velit proin. Duis bibendum, eu orci lacinia elit aliquet, erat id wisi dictumst sed ut et, augue sapien. Lobortis bibendum in lacinia sem risus, massa donec sapien inceptos class platea, deserunt at. Sagittis curabitur dignissim feugiat aliquam, non pellentesque odio wisi dolor, consequat pulvinar nibh ac mauris. Mi tincidunt. Pede eros magnis pede, nec auctor eros. Metus faucibus tempor, mus dictum aenean, accumsan sem sed ac, sit ipsum sodales sit, mauris sit.
-Neque laoreet, etiam hendrerit, metus sed sit excepturi laoreet sollicitudin, neque urna eu in sit lacus urna, id aenean purus. Imperdiet netus sapien non gravida sed, viverra venenatis vestibulum mauris placerat justo rutrum, a sed consectetuer elit imperdiet. Quisque volutpat dolor integer proident enim nonummy. Eu eu habitasse eros, dui enim venenatis aliquam quis elit. Ex aenean lorem mauris libero elit sit, eros arcu morbi massa lacinia vitae sit, culpa sed integer mus, wisi volutpat et, luctus vitae maecenas praesent inceptos. Vel leo viverra felis, non integer aptent non proin malesuada sed, posuere sapien nisl luctus vestibulum nec morbi, turpis nunc odio ante rutrum, facilisis vel condimentum duis facilisis. Odio arcu risus ante aliquid, sed tristique tellus, nec convallis, nibh turpis hendrerit morbi turpis.
-</section>
+      </div>
+    </div>
 
---}}
+  </section>
+
+  <section id="second" data-magellan-target="second">
+    <div class="row">
+      <div class="small-10 columns">
+        <h4>Top Auto Maker's Average Engine Displacement by Year</h4>
+        {{line-chart chartId="displacement" data=data rollup="displ" annotation="dodge"}}
+      </div>
+      <div class="small-2 columns">
+        <p>6 columns</p>
+        <p>
+          {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
+            data-animation-easing="swing"}}
+            <li><a href="#third">Accordion Menu</a></li>
+          {{/zf-magellan}}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="third" data-magellan-target="third">
+    <div class="row">
+      <div class="small-10 columns">
+        <h4>Toyota's Average Combined MPG by Year</h4>
+        {{line-chart chartId="combined-Toyota" data=data rollup="comb08"
+        groupBy="model" filter="Civic"}}
+      </div>
+      <div class="small-2 columns">
+        <p>6 columns</p>
+      </div>
+    </div>
+  </section>
+
 {{outlet}}
