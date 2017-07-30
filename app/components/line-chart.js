@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { scaleLinear, scaleBand, schemeCategory20, scaleOrdinal} from 'd3-scale';
 import { axisBottom, axisLeft, axisRight } from 'd3-axis';
 import { select } from 'd3-selection';
-import { max, mean, ascending } from 'd3-array';
+import { max, mean } from 'd3-array';
 import { line } from 'd3-shape';
 import { nest } from 'd3-collection';
 
@@ -183,7 +183,7 @@ export default Ember.Component.extend({
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 2)
         .attr("d", d => yLine(d.values) )
-    .merge(lines)
+    let merge = path.merge(lines)
         .attr("fill", "none")
         .attr("stroke", d => color(d.key))
         .attr("stroke-linejoin", "round")
@@ -192,7 +192,7 @@ export default Ember.Component.extend({
         .attr("d", d => yLine(d.values) );
 
     if (dotted) {
-      path.attr("stroke-dasharray", "3,3")
+      merge.attr("stroke-dasharray", "3,3")
     }
 
     let txt = make.append("text")

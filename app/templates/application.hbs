@@ -2,28 +2,53 @@
     <div class="top-bar-right">
         {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
           data-animation-easing="swing" class="vertical menu align-right"}}
-        <li><a href="#first">Average MPG</a></li>
-        <li><a href="#second">Average Displacement</a></li>
+        <li><a href="#first">MPG</a></li>
+        <li><a href="#second">Displacement</a></li>
         <li><a href="#third">Explore</a></li>
         {{/zf-magellan}}
     </div>
   </div>
 
   <section id="first" data-magellan-target="first">
+    <br><br>
     <div class="row">
       <div class="small-10 columns">
-          <h4>Top Auto Maker's Average Combined MPG by Year</h4>
-          {{line-chart chartId="combined-mpg" data=data rollup="comb08"
-          annotation="honda"}}
+          <h5>Top Auto Maker's Average Combined MPG by Year</h5>
+          {{line-chart chartId="combined-mpg" data=data rollup="comb08" annotation="honda"}}
       </div>
       <div class="small-2 columns">
-        <p>6 columns</p>
+
+        <h6>Fuel Economy of major Car Brands in America</h6>
+        <a data-open="essayModal" class="button">Click here to for essay</a>
+        <p>
+          In the chart on the left we can see that of the major manufacturers
+          sold in the U.S. Japanese manufacturers tend to perform better than U.S.
+          manufacturers.  As we will see in the next slide there is another measure
+          that strongly correlates with fuel economy...
+        </p>
+
+        {{#zf-reveal id="essayModal" overlay=showDialogOverlay}}
+          <h4>Final Project Essay</h4>
+          <p>
+
+Does the narrative visualization correctly follow the hybrid structure as stated by the essay?	The narrative visualization correctly follows the hybrid structure stated in the essay.	The narrative visualization follows a different structure than is stated in the essay, or the essay does not state the structure.	The narrative visualization is not properly deployed, and it is difficult to utilize at least one of the key components.	The narrative visualization is not properly deployed, and is missing at least one key component (e.g., the reader-led exploration at the end of a martini glass structure).	The narrative visualization does not follow one of the three hybrid structures.	The submission is not a narrative visualization.
+Does the narrative visualization effectively utilize scenes?	The essay properly discusses the layout and design of the scenes of the narrative visualization.	The essay does not discuss the scenes of the narrative visualization adequately enough to determine appropriate application of layout and structure.	The essay does not discuss the scenes of the narrative visualization, or the scenes are not all based on the same template.	The scenes are not properly ordered.	One or more scenes is incomplete.	The submission has no scenes.
+Does the narrative visualization effectively utilize annotations?	The essay properly discusses the application of the annotations of the narrative visualization.	The essay does not discuss the annotations of the narrative visualization adequately enough to determine when and why they are cleared between scenes, how they highlight data, or what template they follow.	The essay does not discuss the annotations of the narrative visualization, or the annotations do not follow the same template.	The annotations are not properly applied.	One or more annotations is incomplete.	The submission has no annotations.
+Does the narrative visualization effectively utilize parameters?	The essay properly discusses the parameters of the narrative visualization, including describing which parameters control the current state of the narrative visualization.	The essay does not discuss the parameters of the narrative visualization adequately enough to determine appropriate use.	The essay does not discuss the parameters of the narrative visualization.	There are errors in the narrative visualization due to the incorrect use of parameters.	The narrative visualization is incomplete due to incomplete use of parameters.	The submission has no parameters.
+Does the narrative visualization effectively utilize triggers?	The essay properly discusses the triggers, including what user events trigger what parameter value changes, and how the viewer is aware of available user events.	The essay does not discuss the triggers adequately enough to determine the connection between user events and parameter value changes, or adequately enough to determine how available user events are communicated to the viewer.	The essay does not discuss the triggers of the narrative visualization, or the available user events are not adequately communicated to the viewer.	The triggers are not properly applied (e.g., a user event does not create the expected result).	One or more triggers is incomplete.	The submission has no triggers.
+          </p>
+          <button class="close-button" data-close aria-label="Close reveal" type="button">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        {{/zf-reveal}}
+
         <p>
           {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
             data-animation-easing="swing"}}
-            <li><a href="#second">Next</a></li>
+              <a class="button" href="#second">Next</a>
           {{/zf-magellan}}
         </p>
+
 
       </div>
     </div>
@@ -31,17 +56,26 @@
   </section>
 
   <section id="second" data-magellan-target="second">
+    <br><br>
     <div class="row">
       <div class="small-10 columns">
         <h4>Top Auto Maker's Average Engine Displacement by Year</h4>
         {{line-chart chartId="displacement" data=data rollup="displ" annotation="dodge"}}
       </div>
       <div class="small-2 columns">
-        <p>6 columns</p>
+        <h6>Displacemnt Tells Another Part of the Story</h6>
+        <p>
+          In the chart on the left we see in general Japanese manufacturers tend to
+          have smaller displacement engines acroess their lines as well.  As the
+          annotation highlights, where we see an increase in displacemnt Dodge
+          we can also see a dip in fuel economy in the previous
+          chart for the same years. You
+          can explore further in the next scene...
+        </p>
         <p>
           {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
             data-animation-easing="swing"}}
-            <li><a href="#third">Next</a></li>
+            <a class="button" href="#third">Next</a>
           {{/zf-magellan}}
         </p>
       </div>
@@ -49,6 +83,7 @@
   </section>
 
   <section id="third" data-magellan-target="third">
+    <br><br>
     <div class="row">
       <div class="small-10 columns">
         <h4>MPG v Displacement for {{currentTarget}}</h4>
@@ -56,10 +91,9 @@
          filter=make secondRollup="displ" modelFilter=carModel}}
       </div>
       <div class="small-2 columns">
-        <p>6 columns</p>
-        <p></p>
+        <h6>Compare MPG and Displacemnt by Make and Model</h6>
 
-        <label>Make
+        <label>Manufacturer
           <select onchange={{action "updateMake"}}>
             {{#each makeOptions as |make|}}
               <option value="{{make}}">{{make}}</option>
@@ -76,6 +110,11 @@
           </select>
         </label>
 
+
+        <p>
+          Above you can choose a manufacturer of car and then further refine by model if
+          desired to view the correlation between dispalcement and MPG.
+        </p>
 
       </div>
     </div>

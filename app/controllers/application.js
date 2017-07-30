@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import { csv } from 'd3-request';
+import { nest } from 'd3-collection';
 
 export default Ember.Controller.extend({
   make: "Chevrolet",
@@ -30,7 +31,14 @@ export default Ember.Controller.extend({
     let make = this.get("make");
 
     if (data && make) {
-      return data.filterBy("make", make).uniqBy("model").map(c => c.model);
+      let filtered = data.filterBy("make", make)
+
+      let rollup = nest()
+          .key( d => d.model)
+          .key( d => d.year )
+          .entries(filtered);
+
+      return rollup.filter(r => r.values.length > 1).map(c => c.key);
     } else {
       return [];
     }
