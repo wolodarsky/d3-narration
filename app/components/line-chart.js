@@ -77,7 +77,7 @@ export default Ember.Component.extend({
       let yearlyAvgMpgByMake = nest()
         .key( d => d[groupBy] )
         .key( d => d.year )
-        .rollup( d => d3.mean( d, car => +car[rollup] ) )
+        .rollup( d => mean( d, car => +car[rollup] ) )
         .entries(data);
 
       this.x.domain(data.map( d => d.year ));
