@@ -1,4 +1,4 @@
-{{#sticky-container options=myStickyOptions}}
+  <div class="nav-container">
     <div class="top-bar-right">
         {{#zf-magellan data-animation-duration="1000" data-deep-linking=false
           data-animation-easing="swing" class="vertical menu align-right"}}
@@ -7,8 +7,7 @@
         <li><a href="#third">Explore</a></li>
         {{/zf-magellan}}
     </div>
-{{/sticky-container}}
-
+  </div>
 
   <section id="first" data-magellan-target="first">
     <div class="row">
@@ -58,6 +57,16 @@
       </div>
       <div class="small-2 columns">
         <p>6 columns</p>
+        <p></p>
+
+        <label>Make
+          <select onchange={{action "updateMake"}}>
+            {{#each makeOptions as |make|}}
+              <option value="{{make}}">{{make}}</option>
+            {{/each}}
+          </select>
+        </label>
+
       </div>
     </div>
   </section>
