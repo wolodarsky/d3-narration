@@ -51,9 +51,9 @@
   <section id="third" data-magellan-target="third">
     <div class="row">
       <div class="small-10 columns">
-        <h4>Toyota's Average Combined MPG by Year</h4>
+        <h4>MPG v Displacement for {{make}}</h4>
         {{line-chart chartId="combined-Toyota" data=data rollup="comb08"
-        groupBy="model" filter="Civic"}}
+         filter=make secondRollup="displ"}}
       </div>
       <div class="small-2 columns">
         <p>6 columns</p>

@@ -2,6 +2,8 @@ import Ember from 'ember';
 import { csv } from 'd3-request';
 
 export default Ember.Controller.extend({
+  make: "Chevrolet",
+
   init() {
     this._super(...arguments);
     csv('vehicles-trim.csv').get( r => this.set("data", r));
@@ -19,7 +21,7 @@ export default Ember.Controller.extend({
 
   actions: {
     updateMake(e) {
-      //this.set("make", e.target.value);
+      this.set("make", e.target.value);
     }
   }
 });

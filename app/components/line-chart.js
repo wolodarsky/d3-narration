@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { scaleLinear, scaleBand, schemeCategory20, scaleOrdinal} from 'd3-scale';
-import { axisBottom, axisLeft } from 'd3-axis';
+import { axisBottom, axisLeft, axisRight } from 'd3-axis';
 import { select } from 'd3-selection';
 import { max, mean, ascending } from 'd3-array';
 import { line } from 'd3-shape';
@@ -13,27 +13,37 @@ export default Ember.Component.extend({
 
   init() {
     this._super(...arguments);
-    this.margin = { top: 20, right: 20, bottom: 30, left: 40 };
-    this.width = 960 - this.margin.left - this.margin.right;
+    this.margin = { top: 20, right: 40, bottom: 30, left: 40 };
+    this.width = 900 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
 
     this.x = scaleBand()
-        .range([0, this.width])
-        .padding(0.05);
+        .range([30, this.width])
+        .padding(0.5);
 
     this.y = scaleLinear()
+        .range([this.height, 0]);
+
+    this.yRight = scaleLinear()
         .range([this.height, 0]);
 
     this.line = line()
       .x( d => this.x(d.key) )
       .y( d => this.y(d.value) );
 
+    this.lineRight = line()
+      .x( d => this.x(d.key) )
+      .y( d => this.yRight(d.value) );
+
     this.updateAxes();
   },
 
   updateAxes() {
-    this.xAxis = axisBottom(this.x);
+    this.xAxis = axisBottom(this.x)
+        .tickFormat(d => d.toString().slice(-2))
     this.yAxis = axisLeft(this.y)
+        .ticks(10, 's');
+    this.yRightAxis = axisRight(this.yRight)
         .ticks(10, 's');
   },
 
@@ -55,10 +65,17 @@ export default Ember.Component.extend({
         .attr("class", "y axis")
         .call(this.yAxis);
 
+    if (this.get("secondRollup")) {
+      svg.append("g")
+          .attr("class", "y right-axis")
+          .attr("transform", "translate( " + (this.width+30) + ", 0 )")
+          .call(this.yRightAxis);
+    }
+
     this.updateChart();
   },
 
-  didReceiveAttrs() {
+  didUpdateAttrs() {
     this._super(...arguments);
     this.updateChart();
   },
@@ -69,77 +86,61 @@ export default Ember.Component.extend({
     if (!rawData) return;
 
     let filter = this.get("filter");
-    let data = filter ? rawData.filterBy("model", filter) : rawData;
+    let data = filter ? rawData.filterBy("make", filter) : rawData;
+    let secondYearlyRollup;
 
-      let rollup = this.get("rollup");
-      let groupBy = this.get("groupBy");
+    let rollup = this.get("rollup");
+    let secondRollup = this.get("secondRollup");
+    let groupBy = this.get("groupBy");
 
-      let yearlyAvgMpgByMake = nest()
-        .key( d => d[groupBy] )
-        .key( d => d.year )
-        .rollup( d => mean( d, car => +car[rollup] ) )
-        .entries(data);
-
-      this.x.domain(data.map( d => d.year ));
-
-      this.y.domain([0, max( yearlyAvgMpgByMake, d => max(d.values, c => c.value) ) ]);
-      this.updateAxes();
-
-      let svg = select("#" + this.get("chartId"))
-        .select("g");
-
-      svg.select(".x.axis")
-          .call(this.xAxis);
-
-      svg.select(".y.axis")
-          .call(this.yAxis);
-
-      //let line = svg.selectAll(".line")
-          //.data(data);
-
-      //line.exit().remove(); // exit
-      //
-      //
-      //debugger;
-
-      //yearlyAvgMpgByMake.forEach( m => {
-
-      let color = scaleOrdinal(schemeCategory20);
-
-      let make = svg.selectAll(".make")
-        .data(yearlyAvgMpgByMake)
-        .enter().append("g")
-        .attr("class", "make");
-
-      make.append("path") // enter
-          .attr("fill", "none")
-          .attr("stroke", d => color(d.key))
-          .attr("stroke-linejoin", "round")
-          .attr("stroke-linecap", "round")
-          .attr("stroke-width", 2)
-          .attr("d", d => this.line(d.values) );
-
-      let taken = [];
-
-      make.append("text")
-            .datum( d =>  {
-              return { id: d.key, value: d.values[d.values.length - 1]};
-            })
-            .attr("transform", d => {
-              return "translate(" + this.x(d.value.key) + "," + this.y(d.value.value) + ")";
-            })
-            .attr("x", 3)
-            .attr("dy", "0.35em")
-            .attr("font-size", "11px")
-            .attr("fill", d => color(d.id))
-            .text( d => d.id );
+    let yearlyRollup = nest()
+      .key( d => d[groupBy] )
+      .key( d => d.year )
+      .rollup( d => mean( d, car => +car[rollup] ) )
+      .entries(data);
 
 
-      let annotation = this.get("annotation");
+    this.x.domain(data.map( d => d.year ));
 
-      if (annotation) {
-        this.addAnnotation(svg, annotation);
-      }
+    this.y.domain([0, max( yearlyRollup, d => max(d.values, c => c.value) ) ]);
+
+    if (secondRollup) {
+      secondYearlyRollup = nest()
+          .key( d => d[groupBy] )
+          .key( d => d.year )
+          .rollup( d => mean( d, car => +car[secondRollup] ) )
+          .entries(data);
+      this.yRight.domain([0, max( secondYearlyRollup, d => max(d.values, c => c.value) ) ]);
+    }
+
+    this.updateAxes();
+
+    let svg = select("#" + this.get("chartId"))
+      .select("g");
+
+    svg.select(".x.axis")
+        .call(this.xAxis);
+
+    svg.select(".y.axis")
+        .call(this.yAxis);
+
+    if (secondRollup) {
+      svg.select(".y.right-axis")
+          .call(this.yRightAxis);
+    }
+
+    if (secondRollup) {
+      this.drawLines(svg, "rollup1", this.y, this.line, yearlyRollup, false, "MPG");
+      this.drawLines(svg, "rollup2", this.yRight, this.lineRight, secondYearlyRollup, true, "Displ.");
+    } else {
+      this.drawLines(svg, "rollup1", this.y, this.line, yearlyRollup);
+    }
+
+    let annotation = this.get("annotation");
+
+    if (annotation) {
+      this.addAnnotation(svg, annotation);
+    }
       //.merge(line) // update
         //.attr("class", "line")
         //.attr("fill", "none")
@@ -154,8 +155,56 @@ export default Ember.Component.extend({
   },
 
   annotations: {
-    honda: {"y": 0, "x": 795, text: "Honda's average MPG peaks with the Fit EV"},
-    dodge: {"y": 0, "x": 875, text: "Dodge's displacement peaks with a dip in average MPG"}
+    honda: {"y": 0, "x": 729, text: "Honda's average MPG peaks with the Fit EV"},
+    dodge: {"y": 0, "x": 798, text: "Dodge's displacement peaks with a dip in average MPG"}
+  },
+
+  drawLines(svg, name, fy, yLine, data, dotted = false, label = "") {
+    let color = scaleOrdinal(schemeCategory20);
+
+    let lines = svg.selectAll("." + name)
+      .data(data)
+
+    let make = lines.enter().append("g");
+
+    let path = make
+      .append("path") // enter
+      .attr("class", name)
+        .attr("fill", "none")
+        .attr("stroke", d => color(d.key))
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 2)
+        .attr("d", d => yLine(d.values) )
+    .merge(lines)
+        .attr("fill", "none")
+        .attr("stroke", d => color(d.key))
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 2)
+        .attr("d", d => yLine(d.values) )
+
+    if (dotted) {
+      path.attr("stroke-dasharray", "3,3")
+    }
+
+    let txt = make.append("text")
+          .datum( d =>  {
+            return { id: d.key, value: d.values[d.values.length - 1]};
+          })
+          .attr("transform", d => {
+            return "translate(" + this.x(d.value.key) + "," + fy(d.value.value) + ")";
+          })
+          .attr("x", 3)
+          .attr("dy", "0.35em")
+          .attr("font-size", "11px")
+          .attr("fill", d => color(d.id))
+
+    if(label) {
+      txt.text(label);
+    } else {
+      txt.text( d => d.id );
+    }
   },
 
   addAnnotation(svg, name) {
