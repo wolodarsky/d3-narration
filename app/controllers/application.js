@@ -3,6 +3,7 @@ import { csv } from 'd3-request';
 
 export default Ember.Controller.extend({
   make: "Chevrolet",
+  carModel: "_none_",
 
   init() {
     this._super(...arguments);
@@ -19,9 +20,30 @@ export default Ember.Controller.extend({
     }
   }),
 
+  currentTarget: Ember.computed("make", "carModel", function() {
+    let model = this.get("carModel");
+    return model && model !== "_none_" ? model : this.get("make");
+  }),
+
+  modelOptions: Ember.computed("data", "make", function() {
+    let data = this.get("data");
+    let make = this.get("make");
+
+    if (data && make) {
+      return data.filterBy("make", make).uniqBy("model").map(c => c.model);
+    } else {
+      return [];
+    }
+  }),
+
   actions: {
     updateMake(e) {
       this.set("make", e.target.value);
+      this.set("carModel", "_none_");
+    },
+
+    updateModel(e) {
+      this.set("carModel", e.target.value);
     }
   }
 });

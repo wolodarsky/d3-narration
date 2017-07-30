@@ -86,7 +86,14 @@ export default Ember.Component.extend({
     if (!rawData) return;
 
     let filter = this.get("filter");
-    let data = filter ? rawData.filterBy("make", filter) : rawData;
+    let modelFilter = this.get("modelFilter") ;
+    let data;
+
+    if (modelFilter && modelFilter !== "_none_") {
+      data = rawData.filterBy("model", modelFilter);
+    } else {
+      data = filter ? rawData.filterBy("make", filter) : rawData;
+    }
     let secondYearlyRollup;
 
     let rollup = this.get("rollup");
@@ -182,7 +189,7 @@ export default Ember.Component.extend({
         .attr("stroke-linejoin", "round")
         .attr("stroke-linecap", "round")
         .attr("stroke-width", 2)
-        .attr("d", d => yLine(d.values) )
+        .attr("d", d => yLine(d.values) );
 
     if (dotted) {
       path.attr("stroke-dasharray", "3,3")

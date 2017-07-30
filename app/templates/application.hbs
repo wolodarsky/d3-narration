@@ -51,9 +51,9 @@
   <section id="third" data-magellan-target="third">
     <div class="row">
       <div class="small-10 columns">
-        <h4>MPG v Displacement for {{make}}</h4>
+        <h4>MPG v Displacement for {{currentTarget}}</h4>
         {{line-chart chartId="combined-Toyota" data=data rollup="comb08"
-         filter=make secondRollup="displ"}}
+         filter=make secondRollup="displ" modelFilter=carModel}}
       </div>
       <div class="small-2 columns">
         <p>6 columns</p>
@@ -66,6 +66,16 @@
             {{/each}}
           </select>
         </label>
+
+        <label>Model
+          <select onchange={{action "updateModel"}}>
+            <option value="_none_">None</option>
+            {{#each modelOptions as |make|}}
+              <option value="{{make}}">{{make}}</option>
+            {{/each}}
+          </select>
+        </label>
+
 
       </div>
     </div>
