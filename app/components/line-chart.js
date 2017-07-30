@@ -37,7 +37,7 @@ export default Ember.Component.extend({
   didInsertElement() {
     this._super(...arguments);
 
-    let svg = select("#line-chart")
+    let svg = select("#" + this.get("chartId"))
         .attr("width", this.width + this.margin.left + this.margin.right)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
@@ -55,18 +55,21 @@ export default Ember.Component.extend({
     this.updateChart();
   },
 
-  didUpdateAttrs() {
+  didReceiveAttrs() {
     this._super(...arguments);
     this.updateChart();
   },
 
   updateChart() {
-    this.get('data').get(data => {
+    let data = this.get('data');
+    if (!data) return;
+
+      let groupBy = this.get("groupBy");
 
       let yearlyAvgMpgByMake = d3.nest()
         .key( d => d.make )
         .key( d => d.year )
-        .rollup( d => d3.mean( d, car => +car.comb08 ) )
+        .rollup( d => d3.mean( d, car => +car[groupBy] ) )
         .entries(data);
 
       this.x.domain(data.map( d => d.year ));
@@ -74,7 +77,7 @@ export default Ember.Component.extend({
       this.y.domain([0, max( yearlyAvgMpgByMake, d => max(d.values, c => c.value) ) ]);
       this.updateAxes();
 
-      let svg = select("#line-chart")
+      let svg = select("#" + this.get("chartId"))
         .select("g");
 
       svg.select(".x.axis")
@@ -124,14 +127,13 @@ export default Ember.Component.extend({
 
       //});
 
-      const annotations = [{
-      note: { label: "Hi"},
-      x: 100, y: 100,
-      dy: 137, dx: 162,
-      subject: { radius: 50, radiusPadding: 10 }
-      }];
+      //const annotations = [{
+      //note: { label: "Hi"},
+      //x: 100, y: 100,
+      //dy: 137, dx: 162,
+      //subject: { radius: 50, radiusPadding: 10 }
+      //}];
 
-      d3.annotation().annotations(annotations);
-    });
+      //d3.annotation().annotations(annotations);
   }
 });
