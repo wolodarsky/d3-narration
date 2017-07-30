@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import { scaleLinear, scaleBand } from 'd3-scale';
+import { scaleLinear, scaleBand, schemeCategory20, scaleOrdinal} from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
 import { max, mean, ascending } from 'd3-array';
@@ -7,6 +7,9 @@ import { line } from 'd3-shape';
 import { nest } from 'd3-collection';
 
 export default Ember.Component.extend({
+  groupBy: "make",
+  rollup: "comb08",
+  filter: "",
 
   init() {
     this._super(...arguments);
@@ -38,7 +41,7 @@ export default Ember.Component.extend({
     this._super(...arguments);
 
     let svg = select("#" + this.get("chartId"))
-        .attr("width", this.width + this.margin.left + this.margin.right)
+        .attr("width", this.width + this.margin.left + this.margin.right*3)
         .attr("height", this.height + this.margin.top + this.margin.bottom)
       .append("g")
         .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
@@ -61,15 +64,20 @@ export default Ember.Component.extend({
   },
 
   updateChart() {
-    let data = this.get('data');
-    if (!data) return;
+    let rawData = this.get('data');
 
+    if (!rawData) return;
+
+    let filter = this.get("filter");
+    let data = filter ? rawData.filterBy("model", filter) : rawData;
+
+      let rollup = this.get("rollup");
       let groupBy = this.get("groupBy");
 
-      let yearlyAvgMpgByMake = d3.nest()
-        .key( d => d.make )
+      let yearlyAvgMpgByMake = nest()
+        .key( d => d[groupBy] )
         .key( d => d.year )
-        .rollup( d => d3.mean( d, car => +car[groupBy] ) )
+        .rollup( d => d3.mean( d, car => +car[rollup] ) )
         .entries(data);
 
       this.x.domain(data.map( d => d.year ));
@@ -96,44 +104,83 @@ export default Ember.Component.extend({
 
       //yearlyAvgMpgByMake.forEach( m => {
 
-        svg.append("circle")
-            .attr("r", 10)
-            .attr("fill", "none")
-            .attr("stroke", "red")
-            .attr("stroke-width", 1)
-            .attr("cy", 100)
-            .attr("cx", 100)
-        ;
+      let color = scaleOrdinal(schemeCategory20);
 
-        let make = svg.selectAll(".make")
-          .data(yearlyAvgMpgByMake)
-          .enter().append("g")
-          .attr("class", d => d.key + " make");
+      let make = svg.selectAll(".make")
+        .data(yearlyAvgMpgByMake)
+        .enter().append("g")
+        .attr("class", "make");
 
-        make.append("path") // enter
-            .attr("fill", "none")
-            .attr("stroke-linejoin", "round")
-            .attr("stroke-linecap", "round")
-            .attr("stroke-width", 2)
-            .attr("d", d => this.line(d.values) );
-        //.merge(line) // update
-          //.attr("class", "line")
-          //.attr("fill", "none")
-          //.attr("stroke", "steelblue")
-          //.attr("stroke-linejoin", "round")
-          //.attr("stroke-linecap", "round")
-          //.attr("stroke-width", 1.5)
-          //.attr("d", this.line);
+      make.append("path") // enter
+          .attr("fill", "none")
+          .attr("stroke", d => color(d.key))
+          .attr("stroke-linejoin", "round")
+          .attr("stroke-linecap", "round")
+          .attr("stroke-width", 2)
+          .attr("d", d => this.line(d.values) );
 
-      //});
+      let taken = [];
 
-      //const annotations = [{
-      //note: { label: "Hi"},
-      //x: 100, y: 100,
-      //dy: 137, dx: 162,
-      //subject: { radius: 50, radiusPadding: 10 }
-      //}];
+      make.append("text")
+            .datum( d =>  {
+              return { id: d.key, value: d.values[d.values.length - 1]};
+            })
+            .attr("transform", d => {
+              return "translate(" + this.x(d.value.key) + "," + this.y(d.value.value) + ")";
+            })
+            .attr("x", 3)
+            .attr("dy", "0.35em")
+            .attr("font-size", "11px")
+            .attr("fill", d => color(d.id))
+            .text( d => d.id );
 
-      //d3.annotation().annotations(annotations);
+
+      let annotation = this.get("annotation");
+
+      if (annotation) {
+        this.addAnnotation(svg, annotation);
+      }
+      //.merge(line) // update
+        //.attr("class", "line")
+        //.attr("fill", "none")
+        //.attr("stroke", "steelblue")
+        //.attr("stroke-linejoin", "round")
+        //.attr("stroke-linecap", "round")
+        //.attr("stroke-width", 1.5)
+        //.attr("d", this.line);
+
+    //});
+
+  },
+
+  annotations: {
+    honda: {"y": 0, "x": 795, text: "Honda's average MPG peaks with the Fit EV"},
+    dodge: {"y": 0, "x": 875, text: "Dodge's displacement peaks with a dip in average MPG"}
+  },
+
+  addAnnotation(svg, name) {
+      let a = this.get("annotations")[name];
+
+      svg.append("circle")
+          .attr("r", 10)
+          .attr("fill", "none")
+          .attr("stroke", "gray")
+          .attr("stroke-width", 2)
+          .attr("cy", 0)
+          .attr("stroke-dasharray", "3,3")
+          .attr("cx", a.x);
+
+      svg.append("path")
+          .attr("fill", "none")
+          .attr("stroke", "black")
+          .attr("stroke-width", 1)
+          .attr("d", `M ${a.x-15} ${a.y} L ${a.x-85} ${a.y}`);
+
+      svg.append("text")
+          .attr("font-size", "11px")
+          .attr("text-anchor", "end")
+          .attr("dx", a.x - 90)
+          .attr("dy", a.y+2.5)
+          .text(a.text)
   }
 });
