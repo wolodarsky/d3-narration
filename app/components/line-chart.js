@@ -2,8 +2,9 @@ import Ember from 'ember';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisBottom, axisLeft } from 'd3-axis';
 import { select } from 'd3-selection';
-import { max } from 'd3-array';
+import { max, mean, ascending } from 'd3-array';
 import { line } from 'd3-shape';
+import { nest } from 'd3-collection';
 
 export default Ember.Component.extend({
 
@@ -60,43 +61,77 @@ export default Ember.Component.extend({
   },
 
   updateChart() {
-    let data = this.get('data');
+    this.get('data').get(data => {
 
-    this.x.domain(data.map( d => d.key ));
-    this.y.domain([0, max( data, d => d.value ) ]);
-    this.updateAxes();
+      let yearlyAvgMpgByMake = d3.nest()
+        .key( d => d.make )
+        .key( d => d.year )
+        .rollup( d => d3.mean( d, car => +car.comb08 ) )
+        .entries(data);
 
-    let svg = select("#line-chart")
-      .select("g");
+      this.x.domain(data.map( d => d.year ));
 
-    svg.select(".x.axis")
-        .call(this.xAxis);
+      this.y.domain([0, max( yearlyAvgMpgByMake, d => max(d.values, c => c.value) ) ]);
+      this.updateAxes();
 
-    svg.select(".y.axis")
-        .call(this.yAxis);
+      let svg = select("#line-chart")
+        .select("g");
 
-    //let line = svg.selectAll(".line")
-        //.data(data);
+      svg.select(".x.axis")
+          .call(this.xAxis);
 
-    //line.exit().remove(); // exit
+      svg.select(".y.axis")
+          .call(this.yAxis);
 
-    svg.append("path") // enter
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-linejoin", "round")
-        .attr("stroke-linecap", "round")
-        .attr("stroke-width", 1.5)
-        .attr("d", this.line);
-      //.merge(line) // update
-        //.attr("class", "line")
-        //.attr("fill", "none")
-        //.attr("stroke", "steelblue")
-        //.attr("stroke-linejoin", "round")
-        //.attr("stroke-linecap", "round")
-        //.attr("stroke-width", 1.5)
-        //.attr("d", this.line);
-    //
-    //
+      //let line = svg.selectAll(".line")
+          //.data(data);
+
+      //line.exit().remove(); // exit
+      //
+      //
+      //debugger;
+
+      //yearlyAvgMpgByMake.forEach( m => {
+
+        svg.append("circle")
+            .attr("r", 10)
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", 1)
+            .attr("cy", 100)
+            .attr("cx", 100)
+        ;
+
+        let make = svg.selectAll(".make")
+          .data(yearlyAvgMpgByMake)
+          .enter().append("g")
+          .attr("class", d => d.key + " make");
+
+        make.append("path") // enter
+            .attr("fill", "none")
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("stroke-width", 2)
+            .attr("d", d => this.line(d.values) );
+        //.merge(line) // update
+          //.attr("class", "line")
+          //.attr("fill", "none")
+          //.attr("stroke", "steelblue")
+          //.attr("stroke-linejoin", "round")
+          //.attr("stroke-linecap", "round")
+          //.attr("stroke-width", 1.5)
+          //.attr("d", this.line);
+
+      //});
+
+      const annotations = [{
+      note: { label: "Hi"},
+      x: 100, y: 100,
+      dy: 137, dx: 162,
+      subject: { radius: 50, radiusPadding: 10 }
+      }];
+
+      d3.annotation().annotations(annotations);
+    });
   }
 });

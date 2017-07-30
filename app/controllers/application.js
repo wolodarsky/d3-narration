@@ -1,14 +1,6 @@
 import Ember from 'ember';
+import { csv } from 'd3-request';
 
 export default Ember.Controller.extend({
-  hondaChartData: [
-    {
-      key: "Honda",
-      value: 200
-    },
-    {
-      key: "Toyota",
-      value: 300
-    },
-  ]
+  hondaChartData: csv('vehicles-trim.csv')
 });
