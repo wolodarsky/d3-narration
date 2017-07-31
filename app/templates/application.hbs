@@ -27,16 +27,68 @@
           that strongly correlates with fuel economy...
         </p>
 
-        {{#zf-reveal id="essayModal" overlay=showDialogOverlay}}
+        {{#zf-reveal id="essayModal"}}
           <h4>Final Project Essay</h4>
           <p>
-
-Does the narrative visualization correctly follow the hybrid structure as stated by the essay?	The narrative visualization correctly follows the hybrid structure stated in the essay.	The narrative visualization follows a different structure than is stated in the essay, or the essay does not state the structure.	The narrative visualization is not properly deployed, and it is difficult to utilize at least one of the key components.	The narrative visualization is not properly deployed, and is missing at least one key component (e.g., the reader-led exploration at the end of a martini glass structure).	The narrative visualization does not follow one of the three hybrid structures.	The submission is not a narrative visualization.
-Does the narrative visualization effectively utilize scenes?	The essay properly discusses the layout and design of the scenes of the narrative visualization.	The essay does not discuss the scenes of the narrative visualization adequately enough to determine appropriate application of layout and structure.	The essay does not discuss the scenes of the narrative visualization, or the scenes are not all based on the same template.	The scenes are not properly ordered.	One or more scenes is incomplete.	The submission has no scenes.
-Does the narrative visualization effectively utilize annotations?	The essay properly discusses the application of the annotations of the narrative visualization.	The essay does not discuss the annotations of the narrative visualization adequately enough to determine when and why they are cleared between scenes, how they highlight data, or what template they follow.	The essay does not discuss the annotations of the narrative visualization, or the annotations do not follow the same template.	The annotations are not properly applied.	One or more annotations is incomplete.	The submission has no annotations.
-Does the narrative visualization effectively utilize parameters?	The essay properly discusses the parameters of the narrative visualization, including describing which parameters control the current state of the narrative visualization.	The essay does not discuss the parameters of the narrative visualization adequately enough to determine appropriate use.	The essay does not discuss the parameters of the narrative visualization.	There are errors in the narrative visualization due to the incorrect use of parameters.	The narrative visualization is incomplete due to incomplete use of parameters.	The submission has no parameters.
-Does the narrative visualization effectively utilize triggers?	The essay properly discusses the triggers, including what user events trigger what parameter value changes, and how the viewer is aware of available user events.	The essay does not discuss the triggers adequately enough to determine the connection between user events and parameter value changes, or adequately enough to determine how available user events are communicated to the viewer.	The essay does not discuss the triggers of the narrative visualization, or the available user events are not adequately communicated to the viewer.	The triggers are not properly applied (e.g., a user event does not create the expected result).	One or more triggers is incomplete.	The submission has no triggers.
+            The following visual narrative does not have any particularly
+            intersting conclusions, but I hope it serves as a good example of a
+            martini glass hybrid structure.
           </p>
+          <p>
+            Following the martini glass structure, the user is presented with a
+            couple of static scenes that simply set the story for the user to
+            explore more in the final scene.
+          </p>
+          <p>
+            The first 2 scenes setup the story by showing an explanation the two
+            parameters the user will be able to change with triggers later on.
+            There are also some annotations to highlight what the captions for each
+            scene are trying to convey. A "Next" button is provided at the end
+            of the caption to move the user to the next scene.  A small
+            navigation menu is tied to the right side to help orient the user as
+            to where they are in the narrative.
+          </p>
+          <p>
+            An annotation is added on the first scene to help explain and
+            already large gap in fuel efficiency from Honda.  On the next scene
+            the axes are diffent so the first annotation is cleared and a new
+            annotation is used to help tie the point being made in this caption
+            to the previous scene.  All annotaions are cleared for the final
+            scene where the user can explore on their own.
+          </p>
+          <p>
+            In the final exploration scene the user can trigger parameter
+            changes using the select menus to chose the manufacturer and
+            optionally the make they want
+            to compare displacement and fuel ecomony for.  The title of the
+            chart is updated as the user makes a selection, as well as the update
+            to the chart, to help provide feedback to the user as they change
+            parameters.
+          </p>
+          <p>
+            A brief caption is also provided in the final scene to explain which
+            triggers and parameters are available to the user.  Hopefully the
+            design is obvious but it doesn't hurt to provide extra guidance when
+            it doesn't clutter the scene.
+          </p>
+
+          <p>
+            Thank you for reviewing my project!
+          </p>
+
+          <br>
+          <p>
+            <i>
+              In light of the comments on Piazza regarding using D3 library
+              wrappers, I wanted to clarify that I did create these charts using raw D3.
+              I did use the Javascript framework Ember to help structure the project and
+              manage dependencies and builds, but all D3 code was written from
+              scratch.  You can view all of the messay raw D3 code I used for the charts on the
+              GitHub repo if you have any questions <a
+                href="https://github.com/wolodarsky/d3-narration/blob/master/app/components/line-chart.js">here</a>.
+            </i>
+          </p>
+
           <button class="close-button" data-close aria-label="Close reveal" type="button">
             <span aria-hidden="true">&times;</span>
           </button>
