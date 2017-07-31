@@ -10,6 +10,7 @@ export default Ember.Component.extend({
   groupBy: "make",
   rollup: "comb08",
   filter: "",
+  rollupPretty: {"comb08": "MPG", "displ": "Displacement in Liters"},
 
   init() {
     this._super(...arguments);
@@ -148,17 +149,26 @@ export default Ember.Component.extend({
     if (annotation) {
       this.addAnnotation(svg, annotation);
     }
-      //.merge(line) // update
-        //.attr("class", "line")
-        //.attr("fill", "none")
-        //.attr("stroke", "steelblue")
-        //.attr("stroke-linejoin", "round")
-        //.attr("stroke-linecap", "round")
-        //.attr("stroke-width", 1.5)
-        //.attr("d", this.line);
 
-    //});
+    svg.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("font-size", "10px")
+            .attr("transform", "translate("+ (15) +","+(this.height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+            .text(this.get("rollupPretty")[rollup]);
 
+    if (secondRollup) {
+      svg.append("text")
+        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+        .attr("font-size", "10px")
+        .attr("transform", "translate("+ (this.width+15) +","+(this.height/2)+")rotate(90)")  // text is drawn off the screen top left, move down and out and rotate
+        .text("Displacement in Liters");
+    }
+
+    svg.append("text")
+            .attr("font-size", "10px")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ (this.width/2) +","+(this.height-10)+")")  // centre below axis
+            .text("Year");
   },
 
   annotations: {
