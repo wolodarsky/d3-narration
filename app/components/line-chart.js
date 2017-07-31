@@ -208,7 +208,32 @@ export default Ember.Component.extend({
           .attr("fill", d => color(d.id))
 
     if(label) {
-      txt.text(label);
+
+      svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "#1f77b4")
+        .attr("stroke-width", 1)
+        .attr("d", `M ${(this.width/4)*2} ${this.height*.9} L ${(this.width/4)*2+50} ${this.height*.9}`);
+
+      svg.append("text")
+        .attr("font-size", "11px")
+        .attr("dx", (this.width/4)*2+60)
+        .attr("dy", this.height*.9+2.5)
+        .text("MPG")
+
+      svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke", "#1f77b4")
+        .attr("stroke-width", 1)
+        .attr("d", `M ${(this.width/4)} ${this.height*.9} L ${(this.width/4)+50} ${this.height*.9}`)
+        .attr("stroke-dasharray", "3,3")
+
+      svg.append("text")
+        .attr("font-size", "11px")
+        .attr("dx", (this.width/4)+60)
+        .attr("dy", this.height*.9+2.5)
+        .text("Displacement")
+
     } else {
       txt.text( d => d.id );
     }
